@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StokPro — Stok Takip Sistemi</title>
+  <meta name="description" content="Profesyonel stok takip ve envanter yönetim sistemi">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-blobs">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon-wrap">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </div>
+      <span class="logo-name">StokPro</span>
+    </div>
+    <h1>Hoş Geldiniz</h1>
+    <p class="login-sub">Hesabınıza giriş yapın</p>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Kullanıcı Adı</label>
+        <div class="inp-wrap">
+          <svg class="inp-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="loginUser" placeholder="kullanıcı adı" autocomplete="username">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Şifre</label>
+        <div class="inp-wrap">
+          <svg class="inp-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="loginPass" placeholder="şifre" autocomplete="current-password">
+        </div>
+      </div>
+      <div id="loginErr" class="err-msg hidden"></div>
+      <button type="submit" class="btn btn-primary w-full">Giriş Yap</button>
+    </form>
+    <p class="login-hint">Varsayılan: <b>admin</b> / <b>admin123</b></p>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="appShell" class="hidden">
+  <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-logo">
+        <div class="logo-icon-wrap sm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <span>StokPro</span>
+      </div>
+      <button class="close-btn" onclick="closeSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="sidenav">
+      <span class="nav-label">Ana Menü</span>
+      <a class="nav-item active" data-page="dashboard" onclick="go('dashboard')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" data-page="products" onclick="go('products')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        Ürünler
+      </a>
+      <a class="nav-item" data-page="movements" onclick="go('movements')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        Stok Hareketleri
+        <span id="alertBadge" class="badge hidden"></span>
+      </a>
+      <a class="nav-item" data-page="warehouses" onclick="go('warehouses')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Depolar
+      </a>
+      <a class="nav-item" data-page="reports" onclick="go('reports')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Raporlar
+      </a>
+      <span class="nav-label admin-only">Yönetim</span>
+      <a class="nav-item admin-only" data-page="users" onclick="go('users')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Kullanıcılar
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="s-user">
+        <div class="avatar" id="sAvatar">A</div>
+        <div>
+          <div class="s-name" id="sName">Admin</div>
+          <div class="s-role" id="sRole">Yönetici</div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="logout()" title="Çıkış">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" onclick="openSidebar()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h2 id="pageTitle">Dashboard</h2>
+      </div>
+      <div class="topbar-right">
+        <div id="critAlert" class="crit-alert hidden">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span id="critCount">0</span> kritik
+        </div>
+        <div class="topbar-user">
+          <div class="avatar sm" id="hAvatar">A</div>
+          <span id="hName">Admin</span>
+        </div>
+      </div>
+    </header>
+    <main id="pageContent" class="page-content"></main>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Product Modal -->
+<div id="productModal" class="modal-bg hidden" onclick="bgClose(event,'productModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="productModalTitle">Yeni Ürün</h3>
+      <button onclick="closeModal('productModal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="productForm">
+        <input type="hidden" id="pId">
+        <div class="form-row">
+          <div class="form-group"><label>Ürün Adı *</label><input type="text" id="pName" placeholder="Ürün adı" required></div>
+          <div class="form-group"><label>Kategori *</label><input type="text" id="pCat" placeholder="Elektronik" list="catList" required><datalist id="catList"></datalist></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Barkod</label><input type="text" id="pBarcode" placeholder="Barkod"></div>
+          <div class="form-group"><label>Birim *</label>
+            <select id="pUnit"><option>Adet</option><option>Kg</option><option>Lt</option><option>Mt</option><option>Kutu</option><option>Paket</option><option>Takım</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Maliyet Fiyatı (₺)</label><input type="number" id="pCost" placeholder="0.00" min="0" step="0.01"></div>
+          <div class="form-group"><label>Satış Fiyatı (₺)</label><input type="number" id="pSale" placeholder="0.00" min="0" step="0.01"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Min. Stok Seviyesi</label><input type="number" id="pMinStock" placeholder="0" min="0"></div>
+          <div class="form-group"><label>KDV (%)</label>
+            <select id="pVat"><option value="0">%0</option><option value="1">%1</option><option value="8">%8</option><option value="18" selected>%18</option><option value="20">%20</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Açıklama</label><textarea id="pDesc" placeholder="Ürün açıklaması..." rows="2"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('productModal')">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Movement Modal -->
+<div id="movementModal" class="modal-bg hidden" onclick="bgClose(event,'movementModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="movModalTitle">Stok Hareketi</h3>
+      <button onclick="closeModal('movementModal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="movementForm">
+        <div class="form-row">
+          <div class="form-group"><label>Hareket Tipi *</label>
+            <select id="mType">
+              <option value="in">📥 Stok Girişi</option>
+              <option value="out">📤 Stok Çıkışı</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Tarih *</label><input type="date" id="mDate" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Ürün *</label>
+            <select id="mProduct" required></select>
+          </div>
+          <div class="form-group"><label>Depo *</label>
+            <select id="mWarehouse" required></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Miktar *</label><input type="number" id="mQty" placeholder="0" min="1" required></div>
+          <div class="form-group"><label>Birim Fiyat (₺)</label><input type="number" id="mPrice" placeholder="0.00" min="0" step="0.01"></div>
+        </div>
+        <div class="form-group"><label>Not</label><textarea id="mNote" placeholder="Hareket notu..." rows="2"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('movementModal')">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Warehouse Modal -->
+<div id="warehouseModal" class="modal-bg hidden" onclick="bgClose(event,'warehouseModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="whModalTitle">Yeni Depo</h3>
+      <button onclick="closeModal('warehouseModal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="warehouseForm">
+        <input type="hidden" id="whId">
+        <div class="form-group"><label>Depo Adı *</label><input type="text" id="whName" placeholder="Merkez Depo" required></div>
+        <div class="form-group"><label>Lokasyon</label><input type="text" id="whLoc" placeholder="İstanbul, Kadıköy"></div>
+        <div class="form-group"><label>Açıklama</label><textarea id="whDesc" placeholder="Depo açıklaması..." rows="2"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('warehouseModal')">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- User Modal -->
+<div id="userModal" class="modal-bg hidden" onclick="bgClose(event,'userModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="uModalTitle">Yeni Kullanıcı</h3>
+      <button onclick="closeModal('userModal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="userForm">
+        <input type="hidden" id="uId">
+        <div class="form-row">
+          <div class="form-group"><label>Ad Soyad *</label><input type="text" id="uFullName" placeholder="Ad Soyad" required></div>
+          <div class="form-group"><label>Kullanıcı Adı *</label><input type="text" id="uUsername" placeholder="kullaniciadi" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Şifre *</label><input type="password" id="uPass" placeholder="Şifre"></div>
+          <div class="form-group"><label>Rol *</label>
+            <select id="uRole"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select>
+          </div>
+        </div>
+        <div id="uErr" class="err-msg hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('userModal')">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div id="confirmModal" class="modal-bg hidden">
+  <div class="modal modal-sm">
+    <div class="modal-head">
+      <h3>Onay</h3>
+      <button onclick="closeModal('confirmModal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmMsg">Emin misiniz?</p>
+      <div class="modal-actions mt-1">
+        <button class="btn btn-ghost" onclick="closeModal('confirmModal')">İptal</button>
+        <button class="btn btn-danger" id="confirmOkBtn">Sil</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
