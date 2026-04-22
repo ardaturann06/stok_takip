@@ -168,6 +168,9 @@ function go(page) {
   document.querySelectorAll('.nav-item').forEach(el => {
     el.classList.toggle('active', el.dataset.page === page);
   });
+  document.querySelectorAll('.bn-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
 
   const titles = { dashboard: 'Dashboard', products: 'Ürünler', movements: 'Stok Hareketleri', warehouses: 'Depolar', reports: 'Raporlar', users: 'Kullanıcılar' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
@@ -186,21 +189,45 @@ function go(page) {
   }
 
   updateAlerts();
+  updateFab();
 }
 
 function updateAlerts() {
   const crit = criticalProducts();
   const badge = document.getElementById('alertBadge');
+  const bnBadge = document.getElementById('bnBadge');
   const critAlert = document.getElementById('critAlert');
   const critCount = document.getElementById('critCount');
   if (crit.length > 0) {
     badge.textContent = crit.length;
     badge.classList.remove('hidden');
+    bnBadge.textContent = crit.length;
+    bnBadge.classList.remove('hidden');
     critAlert.classList.remove('hidden');
     critCount.textContent = crit.length;
   } else {
     badge.classList.add('hidden');
+    bnBadge.classList.add('hidden');
     critAlert.classList.add('hidden');
+  }
+}
+
+function updateFab() {
+  const fab = document.getElementById('fab');
+  const fabPages = ['products', 'movements', 'warehouses', 'users'];
+  if (fabPages.includes(currentPage)) {
+    fab.classList.remove('hidden');
+  } else {
+    fab.classList.add('hidden');
+  }
+}
+
+function fabAction() {
+  switch (currentPage) {
+    case 'products':   newProduct();       break;
+    case 'movements':  newMovement('in');  break;
+    case 'warehouses': newWarehouse();     break;
+    case 'users':      newUser();          break;
   }
 }
 
@@ -355,12 +382,12 @@ function renderProducts() {
     const stockClass = p.stock <= 0 ? 'text-danger' : p.stock <= p.minStock ? 'text-warning' : 'text-success';
     const stockTag = p.stock <= 0 ? '<span class="tag tag-out">Tükendi</span>' : p.stock <= p.minStock ? '<span class="tag tag-warn">Kritik</span>' : '<span class="tag tag-ok">Normal</span>';
     return `<tr>
-      <td><strong>${escHtml(p.name)}</strong><br><span class="text-muted text-sm">${escHtml(p.barcode || '-')}</span></td>
-      <td><span class="tag tag-info">${escHtml(p.category)}</span></td>
-      <td class="${stockClass} font-bold">${fmtN(p.stock)} ${escHtml(p.unit)}</td>
-      <td>${stockTag}</td>
-      <td>₺${fmt(p.cost)}</td>
-      <td>₺${fmt(p.sale)}</td>
+      <td><strong>${escHtml(p.name)}</strong> <span class="text-muted text-sm">${escHtml(p.barcode || '')}</span></td>
+      <td data-label="Kategori"><span class="tag tag-info">${escHtml(p.category)}</span></td>
+      <td data-label="Stok" class="${stockClass} font-bold">${fmtN(p.stock)} ${escHtml(p.unit)}</td>
+      <td data-label="Durum">${stockTag}</td>
+      <td data-label="Maliyet">₺${fmt(p.cost)}</td>
+      <td data-label="Satış">₺${fmt(p.sale)}</td>
       <td>
         <div class="flex gap-2 items-center">
           <button class="btn btn-ghost btn-icon btn-sm" onclick="editProduct(${p.id})" title="Düzenle">
@@ -378,7 +405,7 @@ function renderProducts() {
     <div class="page-head">
       <h2>Ürünler</h2>
       <div class="page-head-actions">
-        <button class="btn btn-primary" onclick="newProduct()">
+        <button class="btn btn-primary mob-hide-sm" onclick="newProduct()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Yeni Ürün
         </button>
@@ -394,7 +421,7 @@ function renderProducts() {
         ${catOptions}
       </select>
     </div>
-    <div class="card">
+    <div class="card mob-cards">
       <div class="table-wrap">
         <table>
           <thead><tr><th>Ürün</th><th>Kategori</th><th>Stok</th><th>Durum</th><th>Maliyet</th><th>Satış</th><th>İşlem</th></tr></thead>
@@ -496,22 +523,22 @@ function renderMovements() {
   const rows = filtered.map(m => {
     const p = products.find(x => x.id === m.productId);
     const w = warehouses.find(x => x.id === m.warehouseId);
-    return `<tr ${m.type === 'in' ? '' : ''}>
+    return `<tr>
       <td><span class="tag ${m.type === 'in' ? 'tag-in' : 'tag-out'}">${m.type === 'in' ? '📥 Giriş' : '📤 Çıkış'}</span></td>
-      <td><strong>${escHtml(p?.name || '-')}</strong></td>
-      <td>${fmtN(m.qty)} ${escHtml(p?.unit || '')}</td>
-      <td>₺${fmt(m.price || 0)}</td>
-      <td>₺${fmt((m.price || 0) * m.qty)}</td>
-      <td>${escHtml(w?.name || '-')}</td>
-      <td>${m.date}</td>
-      <td class="text-muted text-sm">${escHtml(m.note || '-')}</td>
+      <td data-label="Ürün"><strong>${escHtml(p?.name || '-')}</strong></td>
+      <td data-label="Miktar">${fmtN(m.qty)} ${escHtml(p?.unit || '')}</td>
+      <td data-label="Birim Fiyat">₺${fmt(m.price || 0)}</td>
+      <td data-label="Toplam">₺${fmt((m.price || 0) * m.qty)}</td>
+      <td data-label="Depo">${escHtml(w?.name || '-')}</td>
+      <td data-label="Tarih">${m.date}</td>
+      <td data-label="Not" class="text-muted text-sm">${escHtml(m.note || '-')}</td>
     </tr>`;
   }).join('') || '<tr><td colspan="8"><div class="empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><p>Hareket bulunamadı</p></div></td></tr>';
 
   return `
     <div class="page-head">
       <h2>Stok Hareketleri</h2>
-      <div class="page-head-actions">
+      <div class="page-head-actions mob-hide-sm">
         <button class="btn btn-success" onclick="newMovement('in')">📥 Stok Girişi</button>
         <button class="btn btn-danger" onclick="newMovement('out')">📤 Stok Çıkışı</button>
       </div>
@@ -527,7 +554,7 @@ function renderMovements() {
         <option value="out" ${movTypeFilter === 'out' ? 'selected' : ''}>📤 Çıkış</option>
       </select>
     </div>
-    <div class="card">
+    <div class="card mob-cards">
       <div class="table-wrap">
         <table>
           <thead><tr><th>Tip</th><th>Ürün</th><th>Miktar</th><th>Birim Fiyat</th><th>Toplam</th><th>Depo</th><th>Tarih</th><th>Not</th></tr></thead>
