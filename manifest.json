@@ -1,0 +1,24 @@
+{
+  "name": "StokPro — Stok Takip Sistemi",
+  "short_name": "StokPro",
+  "description": "Profesyonel stok takip ve envanter yönetim sistemi",
+  "start_url": "/stok_takip/",
+  "display": "standalone",
+  "background_color": "#05080f",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
