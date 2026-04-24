@@ -660,7 +660,7 @@ function renderWarehouses() {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:14px">
             <div class="text-muted text-sm">Toplam Stok</div>
-            <div style="font-size:22px;font-weight:800;color:var(--primary2)">${fmtN(totalStock)}</div>
+            <div style="font-size:22px;font-weight:800;color:var(--primary-l)">${fmtN(totalStock)}</div>
           </div>
           <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:14px">
             <div class="text-muted text-sm">Stok Değeri</div>
@@ -674,14 +674,14 @@ function renderWarehouses() {
   return `
     <div class="page-head">
       <h2>Depolar</h2>
-      <div class="page-head-actions">
+      <div class="page-head-actions mob-hide-sm">
         <button class="btn btn-primary" onclick="newWarehouse()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Yeni Depo
         </button>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px">${cards}</div>`;
+    <div class="wh-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:16px">${cards}</div>`;
 }
 
 function initWarehouses() {}

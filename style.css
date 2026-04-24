@@ -36,9 +36,10 @@ body{
   min-height:100vh;overflow-x:hidden;
   background-image:
     radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,.08) 0%, transparent 60%);
+  -webkit-text-size-adjust:100%;
 }
 a{text-decoration:none;cursor:pointer}
-input,select,textarea,button{font-family:inherit}
+input,select,textarea,button{font-family:inherit;touch-action:manipulation}
 .hidden{display:none!important}
 
 /* ---- SCROLLBAR ---- */
@@ -655,20 +656,51 @@ tbody tr:last-child td{border-bottom:none}
   .hamburger{display:none!important}
   .main-wrap{margin-left:0}
   .page-content{padding:14px 16px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
-  .topbar{padding:0 16px}
+  .topbar{padding:0 14px}
   .stats-grid{grid-template-columns:1fr 1fr}
   .form-row{grid-template-columns:1fr}
+
+  /* iOS input zoom fix — font-size 16px zooma girmez */
+  input,select,textarea{font-size:16px!important}
+
+  /* Daha büyük dokunma hedefleri */
+  .btn{min-height:44px}
+  .btn-icon{width:40px!important;height:40px!important}
+  .btn-sm.btn-icon{width:36px!important;height:36px!important}
+  .nav-item{padding:11px 12px}
+  .bn-item{padding:8px 4px}
+
+  /* Bottom sheet modal */
   .modal{max-width:100%;border-radius:var(--radius) var(--radius) 0 0;margin-top:auto}
   .modal-bg{align-items:flex-end;padding:0}
   .modal-body{padding:16px}
+
+  /* Bottom nav & FAB */
   .bottom-nav{display:grid}
   .fab{display:flex}
+
+  /* Topbar */
   .topbar-user span{display:none}
+  .crit-alert span:last-child{display:none}
+
+  /* Charts küçük */
+  .chart-wrap{height:180px}
+
+  /* Depo grid */
+  .wh-grid{grid-template-columns:1fr!important}
 }
 
 @media(max-width:480px){
-  .stats-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
   .page-head{flex-direction:column;align-items:flex-start}
+  .page-head-actions{width:100%}
   .toast{right:12px;bottom:calc(80px + env(safe-area-inset-bottom));left:12px;max-width:none}
-  .stat-val{font-size:22px}
+  .stat-val{font-size:20px}
+  .stat-card{padding:16px 14px}
+  .card{padding:16px}
+  .topbar-left h2{font-size:15px}
+}
+
+@media(max-width:360px){
+  .stats-grid{grid-template-columns:1fr}
 }
