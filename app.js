@@ -133,15 +133,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+function toggleUserMenu() {
+  const menu = document.getElementById('userMenu');
+  menu.classList.toggle('hidden');
+}
+
+document.addEventListener('click', e => {
+  const userEl = document.querySelector('.topbar-user');
+  const menu = document.getElementById('userMenu');
+  if (menu && userEl && !userEl.contains(e.target)) {
+    menu.classList.add('hidden');
+  }
+});
+
 function showApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('appShell').classList.remove('hidden');
 
   const initials = currentUser.fullName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-  ['sAvatar', 'hAvatar'].forEach(id => document.getElementById(id).textContent = initials);
+  ['sAvatar', 'hAvatar', 'umAvatar'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = initials; });
   document.getElementById('sName').textContent = currentUser.fullName;
   document.getElementById('sRole').textContent = currentUser.role === 'admin' ? 'Yönetici' : 'Kullanıcı';
   document.getElementById('hName').textContent = currentUser.fullName;
+  document.getElementById('umName').textContent = currentUser.fullName;
+  document.getElementById('umRole').textContent = currentUser.role === 'admin' ? 'Yönetici' : 'Kullanıcı';
 
   document.querySelectorAll('.admin-only').forEach(el => {
     el.style.display = currentUser.role === 'admin' ? '' : 'none';
