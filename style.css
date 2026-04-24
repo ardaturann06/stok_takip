@@ -497,7 +497,9 @@ tbody tr:last-child td{border-bottom:none}
    REPORT GRID
    ============================== */
 .report-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.report-full{grid-column:1/-1}
 .chart-wrap{position:relative;height:230px}
+.stat-val{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ==============================
    USER MENU

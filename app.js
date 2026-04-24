@@ -781,20 +781,20 @@ function renderReports() {
         <div class="card-head"><h3>Ürün Stok Durumu</h3></div>
         <div class="chart-wrap"><canvas id="chartPie"></canvas></div>
       </div>
-      <div class="card" style="grid-column:1/-1">
+      <div class="card report-full">
         <div class="card-head"><h3>Ürün Bazlı Stok Raporu</h3></div>
-        <div class="table-wrap">
+        <div class="table-wrap mob-cards">
           <table>
             <thead><tr><th>Ürün</th><th>Kategori</th><th>Stok</th><th>Min. Stok</th><th>Maliyet/Birim</th><th>Stok Değeri</th><th>Durum</th></tr></thead>
             <tbody>
               ${stocks.map(p => `<tr>
                 <td><strong>${escHtml(p.name)}</strong></td>
-                <td>${escHtml(p.category)}</td>
-                <td>${fmtN(p.stock)} ${escHtml(p.unit)}</td>
-                <td>${fmtN(p.minStock)}</td>
-                <td>₺${fmt(p.cost)}</td>
-                <td>₺${fmt(p.stock * p.cost)}</td>
-                <td>${p.stock <= 0 ? '<span class="tag tag-out">Tükendi</span>' : p.stock <= p.minStock ? '<span class="tag tag-warn">Kritik</span>' : '<span class="tag tag-ok">Normal</span>'}</td>
+                <td data-label="Kategori">${escHtml(p.category)}</td>
+                <td data-label="Stok">${fmtN(p.stock)} ${escHtml(p.unit)}</td>
+                <td data-label="Min. Stok">${fmtN(p.minStock)}</td>
+                <td data-label="Maliyet">₺${fmt(p.cost)}</td>
+                <td data-label="Stok Değeri">₺${fmt(p.stock * p.cost)}</td>
+                <td data-label="Durum">${p.stock <= 0 ? '<span class="tag tag-out">Tükendi</span>' : p.stock <= p.minStock ? '<span class="tag tag-warn">Kritik</span>' : '<span class="tag tag-ok">Normal</span>'}</td>
               </tr>`).join('')}
             </tbody>
           </table>
