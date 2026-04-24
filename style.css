@@ -275,7 +275,7 @@ aside#sidebar{
 /* ==============================
    MAIN
    ============================== */
-.main-wrap{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.main-wrap{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden;min-width:0}
 
 /* ---- TOPBAR ---- */
 .topbar{
@@ -656,13 +656,28 @@ tbody tr:last-child td{border-bottom:none}
   aside#sidebar.open{transform:translateX(0)}
   .close-btn{display:flex!important}
   .hamburger{display:none!important}
+
+  /* Taşmayı engelle */
+  #appShell,
+  .main-wrap,
+  .page-content{overflow-x:hidden;min-width:0}
   .main-wrap{margin-left:0}
   .page-content{padding:14px 16px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
-  .topbar{padding:0 14px}
+  .topbar{padding:0 14px;min-width:0}
+  .topbar-left{min-width:0;flex:1}
+  .topbar-left h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* Grid / layout */
   .stats-grid{grid-template-columns:1fr 1fr}
   .form-row{grid-template-columns:1fr}
+  .dash-grid{grid-template-columns:1fr}
 
-  /* iOS input zoom fix — font-size 16px zooma girmez */
+  /* Search bar dar ekranda alt alta */
+  .search-bar{flex-direction:column;align-items:stretch}
+  .search-inp-wrap{min-width:0}
+  .filter-sel{min-width:0;width:100%}
+
+  /* iOS input zoom fix */
   input,select,textarea{font-size:16px!important}
 
   /* Daha büyük dokunma hedefleri */
@@ -685,7 +700,7 @@ tbody tr:last-child td{border-bottom:none}
   .topbar-user span{display:none}
   .crit-alert span:last-child{display:none}
 
-  /* Charts küçük */
+  /* Charts */
   .chart-wrap{height:180px}
 
   /* Depo grid */

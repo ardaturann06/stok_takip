@@ -266,19 +266,19 @@ function renderDashboard() {
     const w = warehouses.find(x => x.id === m.warehouseId);
     return `<tr>
       <td><span class="tag ${m.type === 'in' ? 'tag-in' : 'tag-out'}">${m.type === 'in' ? '📥 Giriş' : '📤 Çıkış'}</span></td>
-      <td>${escHtml(p?.name || '-')}</td>
-      <td>${fmtN(m.qty)} ${escHtml(p?.unit || '')}</td>
-      <td>${escHtml(w?.name || '-')}</td>
-      <td class="text-muted">${m.date}</td>
+      <td data-label="Ürün">${escHtml(p?.name || '-')}</td>
+      <td data-label="Miktar">${fmtN(m.qty)} ${escHtml(p?.unit || '')}</td>
+      <td data-label="Depo">${escHtml(w?.name || '-')}</td>
+      <td data-label="Tarih" class="text-muted">${m.date}</td>
     </tr>`;
   }).join('') || '<tr><td colspan="5" class="text-muted" style="padding:20px;text-align:center">Henüz hareket yok</td></tr>';
 
   const critRows = crit.slice(0, 5).map(p => `
     <tr class="crit-row">
       <td>${escHtml(p.name)}</td>
-      <td class="text-danger font-bold">${fmtN(p.stock)}</td>
-      <td class="text-muted">${fmtN(p.minStock)}</td>
-      <td>${escHtml(p.unit)}</td>
+      <td data-label="Stok" class="text-danger font-bold">${fmtN(p.stock)}</td>
+      <td data-label="Min." class="text-muted">${fmtN(p.minStock)}</td>
+      <td data-label="Birim">${escHtml(p.unit)}</td>
     </tr>`).join('') || '<tr><td colspan="4" class="text-muted" style="padding:20px;text-align:center">Kritik stok yok</td></tr>';
 
   return `
@@ -307,11 +307,11 @@ function renderDashboard() {
     <div class="dash-grid">
       <div class="card">
         <div class="card-head"><h3>Son Hareketler</h3></div>
-        <div class="table-wrap"><table><thead><tr><th>Tip</th><th>Ürün</th><th>Miktar</th><th>Depo</th><th>Tarih</th></tr></thead><tbody>${recentRows}</tbody></table></div>
+        <div class="table-wrap mob-cards"><table><thead><tr><th>Tip</th><th>Ürün</th><th>Miktar</th><th>Depo</th><th>Tarih</th></tr></thead><tbody>${recentRows}</tbody></table></div>
       </div>
       <div class="card">
         <div class="card-head"><h3>Kritik Stoklar</h3></div>
-        <div class="table-wrap"><table><thead><tr><th>Ürün</th><th>Stok</th><th>Min.</th><th>Birim</th></tr></thead><tbody>${critRows}</tbody></table></div>
+        <div class="table-wrap mob-cards"><table><thead><tr><th>Ürün</th><th>Stok</th><th>Min.</th><th>Birim</th></tr></thead><tbody>${critRows}</tbody></table></div>
       </div>
     </div>
     <div class="dash-grid">
